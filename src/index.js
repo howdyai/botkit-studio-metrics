@@ -226,6 +226,7 @@ module.exports = function(controller) {
     if (message && message.type && relevant_events.indexOf(message.type) != -1) {
       BotMetrics.receiveEvent(bot, message);
     }
+    next();
   });
 
   controller.middleware.send.use(function(bot, message, next) {
