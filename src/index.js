@@ -25,7 +25,6 @@ module.exports = function(controller) {
 
         request(options, function(err, res, body) {
 
-          // console.log('METRICS RESPONSE IS', body);
           if (err) {
             return cb(err);
           }
@@ -55,7 +54,7 @@ module.exports = function(controller) {
       var that = this;
 
       var payload = {
-        instance_uid: botHash(bot),
+        instance_uid: bot.identity.id,
         provider: 'generic',
         event: {
           text: message.text,
@@ -64,7 +63,7 @@ module.exports = function(controller) {
           is_from_bot: false,
           is_im: false,
           timestamp: new Date(),
-          user_id: message.user + controller.config.studio_token,
+          user_id: message.user,
         }
       }
 
@@ -95,7 +94,7 @@ module.exports = function(controller) {
       var that = this;
 
       var payload = {
-        instance_uid: botHash(bot), // slack team id
+        instance_uid: bot.identity.id, // slack team id
         provider: 'generic',
         event: {
           text: message.text,
@@ -104,7 +103,7 @@ module.exports = function(controller) {
           is_from_bot: true,
           is_im: false,
           timestamp: new Date(),
-          user_id: message.to + controller.config.studio_token,
+          user_id: message.to,
         }
       }
 
@@ -140,10 +139,10 @@ module.exports = function(controller) {
         bot.getMessageUser(message).then(function(profile) {
 
           var payload = {
-            instance_uid: botHash(bot),
-            uid: message.user + controller.config.studio_token,
+            instance_uid: bot.identity.id,
+            uid: message.user,
             attributes: {
-              platform_id: profile.id,
+              id: profile.id,
               profile_pic_url: null,
               email: profile.email,
               nickname: profile.username,
@@ -172,68 +171,50 @@ module.exports = function(controller) {
     instance: function(bot, message) {
       var that = this;
       var payload = {
-        uid: botHash(bot),
+        uid: bot.identity.id,
         attributes: {
           name: bot.identity.name,
+          id: bot.identity.id,
         }
       }
 
-      if (debug) {
-        console.log('Send instance', payload);
-      }
+      if (bot.getInstanceInfo) {
+        bot.getInstanceInfo().then(function(instance) {
 
-      that.callAPI('/api/v2/stats/instances', payload, function(err, res) {
-        if (err) {
-          if (debug) console.error('Error in bot instance metrics API: ', err);
+          payload.attributes.name = instance.identity.name;
+          payload.attributes.id = instance.identity.id;
+          payload.attributes.team_name = instance.team.name;
+          payload.attributes.team_url = instance.team.url;
+          payload.attributes.team_id = instance.team.id;
+
+          if (debug) {
+            console.log('Send instance', payload);
+          }
+
+          that.callAPI('/api/v2/stats/instances', payload, function(err, res) {
+            if (err) {
+              if (debug) console.error('Error in bot instance metrics API: ', err);
+            }
+          });
+        }).catch(function(err) {
+          if (err) {
+            if (debug) console.error('Error in bot instance metrics API: ', err);
+          }
+        });
+      } else {
+        if (debug) {
+          console.log('Send instance', payload);
         }
-      });
 
+        that.callAPI('/api/v2/stats/instances', payload, function(err, res) {
+          if (err) {
+            if (debug) console.error('Error in bot instance metrics API: ', err);
+          }
+        });
+      }
     }
 
   }
-
-
-
-  /* generate an anonymous hash to uniquely identify this bot instance */
-  function botHash(bot) {
-    var x = '';
-    switch (bot.type) {
-      case 'slack':
-        if (bot.config.token) {
-          x = md5(bot.config.token);
-        } else {
-          x = 'non-rtm-bot';
-        }
-        break;
-
-      case 'teams':
-        x = md5(bot.identity.id);
-        break;
-
-      case 'fb':
-        x = md5(bot.botkit.config.access_token);
-        break;
-
-      case 'twilioipm':
-        x = md5(bot.config.TWILIO_IPM_SERVICE_SID);
-        break;
-
-      case 'twiliosms':
-        x = md5(bot.botkit.config.account_sid);
-        break;
-
-
-      case 'ciscospark':
-        x = md5(bot.botkit.config.ciscospark_access_token);
-        break;
-
-      default:
-        x = 'unknown-bot-type';
-        break;
-    }
-    return x + controller.config.studio_token;
-  };
-
 
   controller.middleware.heard.use(function(bot, message, next) {
     BotMetrics.receiveEvent(bot, message);
