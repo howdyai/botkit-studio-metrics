@@ -1,10 +1,17 @@
 var request = require('request');
 var md5 = require('md5');
-module.exports = function(controller) {
+module.exports = function(controller, options) {
+
+  if (!options) {
+    options = {
+      debug: false,
+      always_update: false,
+    }
+  }
 
   var bot_metrics_url_base = controller.config.studio_command_uri || 'https://api.botkit.ai';
 
-  var debug = true;
+  var debug = options.debug;
 
   var BotMetrics = {
 
@@ -218,6 +225,10 @@ module.exports = function(controller) {
 
   controller.middleware.heard.use(function(bot, message, next) {
     BotMetrics.receiveEvent(bot, message);
+    if (options.always_update) {
+      BotMetrics.user(bot, message);
+      BotMetrics.instance(bot, message);
+    }
     next();
   });
 
@@ -225,12 +236,20 @@ module.exports = function(controller) {
     var relevant_events = ['message_received', 'direct_message', 'direct_mention', 'mention', 'ambient', 'facebook_postback', 'interactive_message_callback', 'invoke'];
     if (message && message.type && relevant_events.indexOf(message.type) != -1) {
       BotMetrics.receiveEvent(bot, message);
+      if (options.always_update) {
+        BotMetrics.user(bot, message);
+        BotMetrics.instance(bot, message);
+      }
     }
     next();
   });
 
   controller.middleware.send.use(function(bot, message, next) {
     BotMetrics.sendEvent(bot, message);
+    if (options.always_update) {
+      BotMetrics.user(bot, message);
+      BotMetrics.instance(bot, message);
+    }
     next();
   });
 
