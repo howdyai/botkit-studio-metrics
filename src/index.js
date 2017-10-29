@@ -172,6 +172,10 @@ module.exports = function(controller, options) {
             }
             console.log('RESPONSE FROM BOT_USERS', res);
           });
+        }).catch(function(err) {
+          if (err) {
+            if (debug) console.error('Error in bot user metrics API: ', err);
+          }
         });
       }
     },
