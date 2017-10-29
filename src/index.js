@@ -247,7 +247,6 @@ module.exports = function(controller, options) {
   controller.middleware.send.use(function(bot, message, next) {
     BotMetrics.sendEvent(bot, message);
     if (options.always_update) {
-      BotMetrics.user(bot, message);
       BotMetrics.instance(bot, message);
     }
     next();
