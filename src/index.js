@@ -151,7 +151,7 @@ module.exports = function(controller, options) {
             attributes: {
               id: profile.id,
               profile_pic_url: null,
-              email: profile.email,
+              email: profile.email || 'unknown',
               nickname: profile.username,
               first_name: profile.first_name,
               last_name: profile.last_name,
