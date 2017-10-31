@@ -11,6 +11,7 @@ npm install --save botkit-studio-metrics
 Add the following to your code AFTER you initialize your Botkit controller:
 
 ```
+var controller = Botkit.slackbot(options);
 require('botkit-studio-metrics')(controller);
 ```
 
