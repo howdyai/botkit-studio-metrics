@@ -170,7 +170,6 @@ module.exports = function(controller, options) {
             if (err) {
               if (debug) console.error('Error in bot user metrics API: ', err);
             }
-            console.log('RESPONSE FROM BOT_USERS', res);
           });
         }).catch(function(err) {
           if (err) {
