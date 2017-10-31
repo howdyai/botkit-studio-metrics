@@ -16,3 +16,11 @@ require('botkit-studio-metrics')(controller);
 ```
 
 [More information about using Botkit Studio analytics tools can be found here](https://botkit.groovehq.com/knowledge_base/topics/enable-advanced-botkit-studio-analytics-in-your-bot)
+
+## Data collection
+
+With this module installed and enabled, your Botkit application will automatically
+send a copy of any message your bot sends or receives to Botkit Studio's analytics
+API, as well as user profile information and information about each bot instance.
+
+Where applicable, ensure that your terms of service and privacy policy reflect this data collection.
