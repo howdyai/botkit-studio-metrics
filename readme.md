@@ -15,7 +15,7 @@ var controller = Botkit.slackbot();
 require('botkit-studio-metrics')(controller);
 ```
 
-[More information about using Botkit Studio analytics tools can be found here](https://botkit.groovehq.com/knowledge_base/topics/enable-advanced-botkit-studio-analytics-in-your-bot)
+[More information about using Botkit Studio analytics tools can be found here](https://botkit.groovehq.com/knowledge_base/categories/metrics-7)
 
 ## Options
 
