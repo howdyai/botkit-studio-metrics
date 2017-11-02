@@ -77,24 +77,26 @@ module.exports = function(controller, options) {
       if (debug) {
         console.log('Send event', payload);
       }
+      if(message.text && message.text !== '' && message.text !== null){
+        that.callAPI('/api/v2/stats/events', payload, function(err, res) {
+          if (err) {
+            if (debug) console.error('METRICS ERROR', err);
+          } else {
+            if (res.messages) {
+              for (var m = 0; m < res.messages.length; m++) {
+                if (res.messages[m].code == 'bot_user_not_found') {
+                  that.user(bot, message);
+                }
 
-      that.callAPI('/api/v2/stats/events', payload, function(err, res) {
-        if (err) {
-          if (debug) console.error('METRICS ERROR', err);
-        } else {
-          if (res.messages) {
-            for (var m = 0; m < res.messages.length; m++) {
-              if (res.messages[m].code == 'bot_user_not_found') {
-                that.user(bot, message);
-              }
-
-              if (res.messages[m].code == 'bot_instance_not_found') {
-                that.instance(bot, message);
+                if (res.messages[m].code == 'bot_instance_not_found') {
+                  that.instance(bot, message);
+                }
               }
             }
           }
-        }
-      });
+        });
+      }
+
     },
     sendEvent: function(bot, message) {
 
@@ -117,27 +119,29 @@ module.exports = function(controller, options) {
       if (debug) {
         console.log('Send event', payload);
       }
+      if(message.text && message.text !== '' && message.text !== null){
+        that.callAPI('/api/v2/stats/events', payload, function(err, res) {
+          if (err) {
+            if (debug) console.error('METRICS ERROR', err);
+          } else {
+            if (res.messages) {
+              for (var m = 0; m < res.messages.length; m++) {
+                if (res.messages[m].code == 'bot_user_not_found') {
+                  that.user(bot, {
+                    user: message.to,
+                    channel: message.channel
+                  });
+                }
 
-      that.callAPI('/api/v2/stats/events', payload, function(err, res) {
-        if (err) {
-          if (debug) console.error('METRICS ERROR', err);
-        } else {
-          if (res.messages) {
-            for (var m = 0; m < res.messages.length; m++) {
-              if (res.messages[m].code == 'bot_user_not_found') {
-                that.user(bot, {
-                  user: message.to,
-                  channel: message.channel
-                });
-              }
-
-              if (res.messages[m].code == 'bot_instance_not_found') {
-                that.instance(bot, message);
+                if (res.messages[m].code == 'bot_instance_not_found') {
+                  that.instance(bot, message);
+                }
               }
             }
           }
-        }
-      });
+        });
+      }
+
     },
     user: function(bot, message) {
 
