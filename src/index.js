@@ -40,10 +40,7 @@ module.exports = function(controller, options) {
             return cb(null, {});
           }
 
-          if (res.statusCode === 401) {
-            console.error('Invalid Botkit Studio Token');
-            return cb({error: 'Invalid Botkit Studio Token'});
-          }
+
 
           try {
             json = JSON.parse(body);
@@ -51,8 +48,14 @@ module.exports = function(controller, options) {
             return cb(e);
           }
           if (json.error) {
+            if (res.statusCode === 401) {
+              console.error(json.error);
+            }
             return cb(json.error);
           } else if (json.errors) {
+            if (res.statusCode === 401) {
+              console.error(json.errors[0]);
+            }
             return cb(json.errors[0]);
           } else {
             return cb(null, json.data);
