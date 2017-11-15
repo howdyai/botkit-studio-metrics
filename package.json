@@ -1,6 +1,6 @@
 {
   "name": "botkit-studio-metrics",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "a client for botkit studio's enhanced analytics capabilities",
   "main": "src/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/howdyai/botkit-studio-metrics.git"
+    "url": "https://github.com/howdyai/botkit-studio-metrics.git"
   },
   "keywords": [
     "botkit",
