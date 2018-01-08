@@ -263,6 +263,6 @@ module.exports = function(controller, options) {
     next();
   });
 
-  return Botmetrics;
+  return BotMetrics;
 
 }
