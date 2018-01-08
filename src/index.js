@@ -234,9 +234,6 @@ module.exports = function(controller, options) {
 
   }
 
-  // make the metrics features available from outside
-  controller.metrics = BotMetrics;
-
   controller.middleware.heard.use(function(bot, message, next) {
     BotMetrics.receiveEvent(bot, message);
     if (options.always_update) {
@@ -266,5 +263,6 @@ module.exports = function(controller, options) {
     next();
   });
 
+  return Botmetrics;
 
 }
