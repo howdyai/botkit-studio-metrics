@@ -18,7 +18,7 @@
     "crm"
   ],
   "author": "ben@howdy.ai",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/howdyai/botkit-studio-metrics/issues"
   },
