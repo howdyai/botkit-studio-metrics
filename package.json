@@ -1,6 +1,6 @@
 {
   "name": "botkit-studio-metrics",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "a client for botkit studio's enhanced analytics capabilities",
   "main": "src/index.js",
   "scripts": {
@@ -24,7 +24,5 @@
   },
   "homepage": "https://github.com/howdyai/botkit-studio-metrics#readme",
   "dependencies": {
-    "md5": "^2.2.1",
-    "request": "^2.83.0"
   }
 }
