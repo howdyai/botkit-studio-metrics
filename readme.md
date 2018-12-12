@@ -1,4 +1,6 @@
-# Botkit Studio Advanced Analytics
+# DEPRECATED ~Botkit Studio Advanced Analytics~
+
+This module is officially deprecated.
 
 This module enables the advanced analytics and extended metrics available in [Botkit Studio](https://studio.botkit.ai).
 
